@@ -14,7 +14,7 @@ This project aims to build a scalable and secure pipeline to collect and process
 - **Requirement**: The system should be fault-tolerant and ensure that no data is lost.
 - **Solution**: We ensure data reliability by using:
     - **Kafka** for message persistence.
-    - **MongoDB** for reliable storage with automatic failover using replica sets.
+    - **MongoDB** for reliable storage of unstructured data.
 
 ### 3. **Availability**
 - **Requirement**: The system should be highly available, ensuring minimal downtime.
