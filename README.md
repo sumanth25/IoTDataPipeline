@@ -80,11 +80,9 @@ The architecture consists of the following components:
 - **Issue**: While MongoDB provides **basic replication** and **failover**, more advanced configurations may be necessary for larger-scale production environments.
 - **Solution**: For greater fault tolerance and high availability, advanced MongoDB configurations such as **sharded clusters** and **geo-replication** can be considered.
 
-## 3. **Scalability**
-
+### 3. **Scalability**
 - **Issue**: Embedding aggregation logic within the data processing service makes it difficult to scale for large data volumes, as the entire service must be scaled. This approach works well for simple calculations (e.g., average/median/max/min values), but becomes inefficient when handling more complex aggregations at scale.
 - **Solution**: Isolating the aggregation logic into a dedicated microservice allows for independent scaling of the aggregation component, optimizing resource utilization and improving performance when dealing with large datasets.
-
 
 ## Conclusion
 
