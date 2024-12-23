@@ -1,0 +1,265 @@
+openapi: 3.0.3
+info:
+title: IoT Data Pipeline API
+description: API for managing IoT device data ingestion, aggregation, and querying.
+version: 1.0.0
+contact:
+name: Sumanth Sudeendra
+email: sumanth.sudeendra@gmail.com
+servers:
+- url: http://localhost:8080/api/v1
+description: Local Development Server
+paths:
+/sensor-data:
+post:
+summary: Ingest sensor data from IoT devices
+operationId: ingestSensorData
+tags:
+- Sensor Data
+requestBody:
+description: The sensor data to be ingested.
+content:
+application/json:
+schema:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+description: The ID of the IoT device sending data.
+sensorType:
+type: string
+example: temperature
+description: The type of sensor data (e.g., temperature, heart rate).
+value:
+type: number
+format: float
+example: 22.5
+description: The sensor reading value.
+unit:
+type: string
+example: °C
+description: The unit of measurement (e.g., °C for temperature).
+timestamp:
+type: integer
+format: int64
+example: 1640000000000
+description: The timestamp of the sensor data.
+responses:
+'200':
+description: Successfully ingested the sensor data.
+content:
+application/json:
+schema:
+type: object
+properties:
+message:
+type: string
+example: Data ingested successfully.
+'400':
+description: Bad request (invalid data).
+'500':
+description: Internal server error.
+/aggregated-data:
+get:
+summary: Query aggregated sensor data (average, min, max) for a given timeframe.
+operationId: queryAggregatedData
+tags:
+- Aggregated Data
+parameters:
+- name: deviceId
+in: query
+required: true
+description: The ID of the IoT device to filter by.
+schema:
+type: string
+example: device_1
+- name: sensorType
+in: query
+required: true
+description: The type of sensor data to filter by.
+schema:
+type: string
+example: temperature
+- name: startTime
+in: query
+required: true
+description: The start of the timeframe for aggregation (in Unix timestamp).
+schema:
+type: integer
+example: 1640000000000
+- name: endTime
+in: query
+required: true
+description: The end of the timeframe for aggregation (in Unix timestamp).
+schema:
+type: integer
+example: 1640003600000
+responses:
+'200':
+description: Successfully retrieved aggregated data.
+content:
+application/json:
+schema:
+type: object
+properties:
+avgValue:
+type: number
+format: float
+example: 22.5
+minValue:
+type: number
+format: float
+example: 18
+maxValue:
+type: number
+format: float
+example: 25
+unit:
+type: string
+example: °C
+'400':
+description: Bad request (invalid parameters).
+'404':
+description: Aggregated data not found for the given timeframe.
+'500':
+description: Internal server error.
+/devices:
+get:
+summary: Retrieve a list of IoT devices
+operationId: getDevices
+tags:
+- Devices
+responses:
+'200':
+description: Successfully retrieved the list of devices.
+content:
+application/json:
+schema:
+type: array
+items:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+deviceType:
+type: string
+example: thermostat
+createdAt:
+type: string
+format: date-time
+example: '2024-01-01T12:00:00Z'
+'500':
+description: Internal server error.
+post:
+summary: Add a new IoT device
+operationId: addDevice
+tags:
+- Devices
+requestBody:
+description: The new device to be added.
+content:
+application/json:
+schema:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+description: The unique ID of the device.
+deviceType:
+type: string
+example: thermostat
+description: The type of the IoT device (e.g., Thermostat, Heart rate monitor).
+responses:
+'201':
+description: Successfully added a new device.
+content:
+application/json:
+schema:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+'400':
+description: Bad request (invalid data).
+'500':
+description: Internal server error.
+/devices/{deviceId}:
+get:
+summary: Retrieve details of a specific IoT device
+operationId: getDeviceById
+tags:
+- Devices
+parameters:
+- name: deviceId
+in: path
+required: true
+description: The unique ID of the IoT device.
+schema:
+type: string
+example: device_1
+responses:
+'200':
+description: Successfully retrieved device details.
+content:
+application/json:
+schema:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+deviceType:
+type: string
+example: thermostat
+createdAt:
+type: string
+format: date-time
+example: '2024-01-01T12:00:00Z'
+'404':
+description: Device not found.
+'500':
+description: Internal server error.
+components:
+schemas:
+SensorData:
+type: object
+properties:
+deviceId:
+type: string
+example: device_1
+sensorType:
+type: string
+example: temperature
+value:
+type: number
+format: float
+example: 22.5
+unit:
+type: string
+example: °C
+timestamp:
+type: integer
+format: int64
+example: 1640000000000
+AggregatedData:
+type: object
+properties:
+avgValue:
+type: number
+format: float
+example: 22.5
+minValue:
+type: number
+format: float
+example: 18
+maxValue:
+type: number
+format: float
+example: 25
+unit:
+type: string
+example: °C
