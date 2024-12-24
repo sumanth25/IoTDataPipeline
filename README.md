@@ -37,21 +37,12 @@ We use **MongoDB** to store sensor data. The following collections will be used:
     - `device_type`: Type of the IoT device (e.g., Thermostat, Heart rate monitor).
     - `created_at`: Timestamp when the device was created.
 
-2. **sensor_readings**: Stores readings from devices.
+2. **sensor_data**: Stores readings from devices.
     - `_id`: Unique identifier for each reading.
     - `device_id`: Reference to the IoT device (`devices` collection).
     - `value`: Sensor reading value (e.g., temperature, heart rate, fuel).
     - `unit`: The unit of the sensor reading (e.g., °C for temperature, bpm for heart rate, liters for fuel). This field provides context for the reading's measurement unit.
     - `timestamp`: Timestamp when the reading was recorded.
-
-3. **aggregated_data**: Stores precomputed aggregate values (average, min, max) for a specific timeframe.
-    - `_id`: Unique identifier for the aggregation.
-    - `sensor_id`: Reference to the specific sensor.
-    - `timeframe_start`: Start of the timeframe for aggregation.
-    - `timeframe_end`: End of the timeframe for aggregation.
-    - `avg_value`: Average reading for the timeframe.
-    - `min_value`: Minimum reading for the timeframe.
-    - `max_value`: Maximum reading for the timeframe.
 
 ## High-Level Architecture
 
@@ -73,7 +64,7 @@ The architecture consists of the following components:
 ## Known Limitations
 
 ### 1. **Performance**
-- **Issue**: MongoDB is scalable but may require further optimizations to handle very large datasets effectively.
+- **Issue**: MongoDB is scalable but may require further optimizations to handle very large datasets effectively. Aggregation of data is not precomputed.
 - **Solution**: Performance enhancements such as **indexing** and **sharding** should be implemented to ensure that the system can handle large volumes of data from many IoT devices.
 
 ### 2. **Fault Tolerance**
