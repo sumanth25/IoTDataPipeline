@@ -1,43 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.iotdatapipeline</groupId>
         <artifactId>iot-data-pipeline</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath> <!-- Path to the parent pom -->
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-
     <artifactId>iot-device-simulator</artifactId>
 
+    <!-- Define properties for versions -->
+    <properties>
+        <spring.kafka.version>3.0.5</spring.kafka.version>
+        <iot.shared.lib.version>1.0.0</iot.shared.lib.version>
+        <spring.boot.version>3.4.1</spring.boot.version>  <!-- Example version for Spring Boot -->
+    </properties>
+
     <dependencies>
-        <!-- Specific dependencies for this submodule (IoT Simulator) -->
+        <!-- Spring Boot Web and Kafka -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version> <!-- Reference to Spring Boot version -->
         </dependency>
+
+        <!-- Spring Kafka for message consumption -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
+            <version>${spring.kafka.version}</version> <!-- Reference to Spring Kafka version -->
         </dependency>
+
+        <!-- Shared library dependency -->
+        <dependency>
+            <groupId>com.iotdatapipeline</groupId>
+            <artifactId>iot-shared-lib</artifactId>
+            <version>${iot.shared.lib.version}</version> <!-- Reference to shared library version -->
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Logging (SLF4J + Logback) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+            <version>${spring.boot.version}</version> <!-- Use Spring Boot version for logging -->
         </dependency>
-        <!-- Add other dependencies for your service as needed -->
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.10</version>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
