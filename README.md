@@ -39,7 +39,8 @@ We use **MongoDB** to store sensor data. The following collections will be used:
 
 2. **sensor_data**: Stores readings from devices.
     - `_id`: Unique identifier for each reading.
-    - `device_id`: Reference to the IoT device (`devices` collection).
+    - `device_id`: Unique Id/Serial Number to identify the IoT device.
+    - `sensorType`: Type of sensor (temperature, fuel_level, heart_rate)
     - `value`: Sensor reading value (e.g., temperature, heart rate, fuel).
     - `unit`: The unit of the sensor reading (e.g., °C for temperature, bpm for heart rate, liters for fuel). This field provides context for the reading's measurement unit.
     - `timestamp`: Timestamp when the reading was recorded.
