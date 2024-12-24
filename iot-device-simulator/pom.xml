@@ -14,7 +14,7 @@
     <properties>
         <spring.kafka.version>3.0.5</spring.kafka.version>
         <iot.shared.lib.version>1.0.0</iot.shared.lib.version>
-        <spring.boot.version>3.4.1</spring.boot.version>  <!-- Example version for Spring Boot -->
+        <spring.boot.version>3.0.5</spring.boot.version>  <!-- Example version for Spring Boot -->
     </properties>
 
     <dependencies>
