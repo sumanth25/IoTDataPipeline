@@ -83,7 +83,7 @@ The IoT Data Pipeline consists of multiple services and components. Below is a s
   Purpose: Kafka is used as the message broker for streaming data from the **iot-device-simulator** to the **data-processing-service**. It facilitates the real-time data flow.
 
 - **iot-device-simulator**:  
-  Port: `8081`  
+  Port: `8080`  
   Purpose: Simulates IoT devices and sends data to Kafka every second. This service generates mock sensor data to mimic real-world IoT device inputs.
 
 - **data-processing-service**:  
