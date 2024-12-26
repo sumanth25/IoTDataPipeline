@@ -69,7 +69,7 @@ The architecture consists of the following components:
 - **Solution**: Performance enhancements such as **indexing** and **sharding** should be implemented to ensure that the system can handle large volumes of data from many IoT devices.
 
 ### 2. **Fault Tolerance**
-- **Issue**: While MongoDB provides **basic replication** and **failover**, more advanced configurations may be necessary for larger-scale production environments.
+- **Issue**: While MongoDB provides **basic replication** and **failover**, more advanced configurations may be necessary for larger-scale production environments. Mongo DB cluster is not used.
 - **Solution**: For greater fault tolerance and high availability, advanced MongoDB configurations such as **sharded clusters** and **geo-replication** can be considered.
 
 ### 3. **Scalability**
