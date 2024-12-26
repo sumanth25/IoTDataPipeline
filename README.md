@@ -76,6 +76,10 @@ The architecture consists of the following components:
 - **Issue**: Embedding aggregation logic within the data processing service makes it **difficult** to scale for **large data volumes**, as the entire service must be scaled. This approach works well for simple calculations (e.g., average/median/max/min values), but becomes inefficient when handling more complex aggregations at scale.
 - **Solution**: Isolating the aggregation logic into a **dedicated microservice** allows for **independent scaling** of the aggregation component, optimizing resource utilization and improving performance when dealing with large datasets.
 
+- **Issue**: No Separate docker images for services hence **difficult** to scale instances.
+- **Solution**: Separate docker images for  data-processing-service and data-access-service helps in scaling instances on demand.
+
+
 ## Conclusion
 
 This prototype demonstrates a **scalable**, **fault-tolerant**, and **flexible** IoT data collection and processing system using **MongoDB** for storage. By leveraging **Kafka** for message ingestion, **Spring Boot** for processing and API services, and **MongoDB** for data storage, the system is designed to:
