@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.data.mongodb.repository: DEBUG
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017  # MongoDB URI (replace with your actual URI if needed)
+      database: sensor_data_db
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092  # Replace with your Kafka broker URL
+      group-id: sensor-consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
