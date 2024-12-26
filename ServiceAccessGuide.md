@@ -98,6 +98,6 @@ The IoT Data Pipeline consists of multiple services and components. Below is a s
 
 - Ensure that **MongoDB** and **Kafka** are running before starting the Spring Boot services.
 - The **IoT device simulator** will send data every second, and the **data-processing-service** will process and store the data accordingly.
-- The **data-access-service** will allow you to access the aggregated data through the `/aggregation` endpoint.
+- The **data-access-service** will allow you to access the aggregated data through the `/aggregated` endpoint.
 
 With this setup, you can now simulate, process, and access aggregated IoT device data seamlessly in your local environment.
