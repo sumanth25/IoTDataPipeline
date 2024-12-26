@@ -1,0 +1,14 @@
+server:
+  port: 8082
+
+security:
+  user:
+    name: admin  # Default username
+    password: password  # Default password
+    roles: USER  # Default roles assigned to the user
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017  # MongoDB URI (replace with your actual URI if needed)
+      database: sensor_data_db
