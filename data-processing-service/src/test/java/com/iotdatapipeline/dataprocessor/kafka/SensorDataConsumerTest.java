@@ -3,71 +3,75 @@ package com.iotdatapipeline.dataprocessor.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iotdatapipeline.dataprocessor.exception.DataProcessingException;
 import com.iotdatapipeline.dataprocessor.service.ProcessingDataService;
+import com.iotdatapipeline.dataprocessor.util.SensorDataObjectMapperUtil;
 import com.iotdatapipeline.shared.dto.SensorDataDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class SensorDataConsumerTest {
-
-    @InjectMocks
-    private SensorDataConsumer sensorDataConsumer;
+class SensorDataConsumerTest {
 
     @Mock
     private ProcessingDataService processingDataService;
 
+    @Mock
+    private SensorDataObjectMapperUtil sensorDataObjectMapperUtil;
+
+    @InjectMocks
+    private SensorDataConsumer sensorDataConsumer;
+
+    private static final Logger logger = LoggerFactory.getLogger(SensorDataConsumerTest.class);
+
     @BeforeEach
-    public void setup() {
-        // Initialize mocks
-        MockitoAnnotations.openMocks(this);
+    void setUp() {
+        MockitoAnnotations.openMocks(this); // Initialize mocks and inject them into the consumer
     }
 
     @Test
-    public void testConsume_ValidJson() throws JsonProcessingException {
-        // Valid JSON input
-        String validJson = "{\"deviceId\": \"device123\", \"sensorType\": \"temperature\", \"value\": 25.6}";
+    void testConsume_success() throws JsonProcessingException {
+        // Arrange
+        String recordValue = "{\"id\":\"123\", \"value\":25.5}";
+        SensorDataDTO sensorDataDTO = new SensorDataDTO();
+        sensorDataDTO.setDeviceId("123");
+        sensorDataDTO.setValue(25.5);
 
-        // Expected DTO object after parsing
-        SensorDataDTO expectedData = new SensorDataDTO("device123", "temperature", 25.6, "Celsius", 1672531199);
+        // Mock the JSON parsing
+        when(sensorDataObjectMapperUtil.jsonToObject(recordValue, SensorDataDTO.class)).thenReturn(sensorDataDTO);
 
-        // Act: Call the method to parse the JSON
-        SensorDataDTO actualData = sensorDataConsumer.parseSensorData(validJson);
+        // Act
+        sensorDataConsumer.consume(recordValue);
 
-        // Assert: Verify that the parsed data matches the expected result
-        assertNotNull(actualData);
-        assertEquals(expectedData.getDeviceId(), actualData.getDeviceId());
-        assertEquals(expectedData.getSensorType(), actualData.getSensorType());
-        assertEquals(expectedData.getValue(), actualData.getValue());
+        // Assert
+        ArgumentCaptor<SensorDataDTO> captor = ArgumentCaptor.forClass(SensorDataDTO.class);
+        verify(processingDataService).saveSensorData(captor.capture());
+        SensorDataDTO savedSensorData = captor.getValue();
+        assertEquals(sensorDataDTO.getDeviceId(), savedSensorData.getDeviceId());
+        assertEquals(sensorDataDTO.getValue(), savedSensorData.getValue());
     }
 
     @Test
-    public void testConsume_InvalidJson() {
-        // Invalid JSON (missing value field)
-        String invalidJson = "{invalid json}";
+    void testConsume_failure_dueToJsonProcessingException() throws JsonProcessingException {
+        // Arrange
+        String recordValue = "{\"id\":\"123\", \"value\":25.5}";
 
-        // Act & Assert: Expect KafkaProcessingException to be thrown when invalid JSON is passed
-        assertThrows(DataProcessingException.class, () -> {
-            sensorDataConsumer.consume(invalidJson);
+        // Mock the JSON parsing to throw an exception
+        when(sensorDataObjectMapperUtil.jsonToObject(recordValue, SensorDataDTO.class))
+                .thenThrow(new JsonProcessingException("Invalid JSON") {});
+
+        // Act & Assert
+        DataProcessingException exception = assertThrows(DataProcessingException.class, () -> {
+            sensorDataConsumer.consume(recordValue);
         });
-    }
 
-    @Test
-    public void testConsume_ValidJson_StoresData() throws JsonProcessingException {
-        // Valid JSON input
-        String validJson = "{\"deviceId\": \"device123\", \"sensorType\": \"temperature\", \"value\": 25.6}";
-
-        // Mock the behavior of processingDataService.saveSensorData() (no-op, just avoid exceptions)
-        doNothing().when(processingDataService).saveSensorData(any(SensorDataDTO.class));
-
-        // Act: Simulate the consume method (this will call saveSensorData internally)
-        sensorDataConsumer.consume(validJson);
-
-        // Assert: Verify that saveSensorData was called with the expected data
-        verify(processingDataService, times(1)).saveSensorData(any(SensorDataDTO.class));
+        assertTrue(exception.getMessage().contains("Error parsing JSON message"));
     }
 }
