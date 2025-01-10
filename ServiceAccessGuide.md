@@ -46,22 +46,28 @@ First, pull the latest MongoDB image with the default port `27017`:
 
 docker pull mongo:latest
 
-### 3.Start the iot-device-simulator Service
+### 3. Pull and Run Kafka Docker Image
+
+First, pull the latest Kafka image with the default port `9092`:
+
+docker pull wurstmeister/kafka:latest
+
+### 4.Start the iot-device-simulator Service
 
 cd iot-device-simulator
 ./mvnw spring-boot:run
 
-### 4.Start the data-processing-service Service
+### 5.Start the data-processing-service Service
 
 cd data-processing-service
 ./mvnw spring-boot:run
 
-### 5.Start the data-access-service Service
+### 6.Start the data-access-service Service
 
 cd data-access-service
 ./mvnw spring-boot:run
 
-### 6.Access Aggregated Data
+### 7.Access Aggregated Data
 
 Once all services are running, you can access the aggregated data through the data-access-service. The service exposes an endpoint that aggregates data from multiple devices and sensor types using the IOT_DataAccess_Insomnia_2024-12-26.json collection having REST APIs
 
